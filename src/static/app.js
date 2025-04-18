@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Function to fetch activities from API
   async function fetchActivities() {
     try {
-      const response = await fetch("/activities");
+      const response = await fetch(`${window.location.origin}/activities`); // Ensure correct base URL
       const activities = await response.json();
 
       // Clear loading message
@@ -25,6 +25,10 @@ document.addEventListener("DOMContentLoaded", () => {
           <p>${details.description}</p>
           <p><strong>Schedule:</strong> ${details.schedule}</p>
           <p><strong>Availability:</strong> ${spotsLeft} spots left</p>
+          <p><strong>Participants:</strong></p>
+          <ul>
+            ${details.participants.map(participant => `<li>${participant}</li>`).join("")}
+          </ul>
         `;
 
         activitiesList.appendChild(activityCard);
@@ -50,7 +54,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     try {
       const response = await fetch(
-        `/activities/${encodeURIComponent(activity)}/signup?email=${encodeURIComponent(email)}`,
+        `${window.location.origin}/activities/${encodeURIComponent(activity)}/signup?email=${encodeURIComponent(email)}`, // Ensure correct base URL
         {
           method: "POST",
         }
@@ -79,6 +83,11 @@ document.addEventListener("DOMContentLoaded", () => {
       messageDiv.classList.remove("hidden");
       console.error("Error signing up:", error);
     }
+  });
+
+  // Toggle dark mode
+  document.getElementById("dark-mode-toggle").addEventListener("click", () => {
+    document.body.classList.toggle("dark-mode");
   });
 
   // Initialize app
